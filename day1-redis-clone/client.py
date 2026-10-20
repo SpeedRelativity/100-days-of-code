@@ -4,7 +4,7 @@ client = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
 client.connect(("localhost", 5150)) # connect to the server on localhost and port 5150
 
-client.sendall(b"hello server, this is client")
+client.sendall(b"SET name John")
 
 data = client.recv(1024)
 

@@ -16,21 +16,59 @@ server.bind(("localhost", 5150))
 
 server.listen(2) # listen for incoming requests. 2 means only 2 clients can connect at once.
 
+database = {}
 
-while True:
+try:
 
-    client_socket, client_address = server.accept()
-    print(f"Connection from {client_address} has been established!")
+    while True:
 
-    data = client_socket.recv(1024) # receive data from the client. 1024 is the buffer size
+        client_socket, client_address = server.accept()
+        print(f"Connection from {client_address} has been established!")
 
-    message = data.decode("utf-8") # decode the bytes to string
+        data = client_socket.recv(1024) # receive data from the client. 1024 is the buffer size
 
-    print(f"Message from client: {message}")
+        message = data.decode("utf-8") # decode the bytes to string
 
-    client_socket.send(b"Hello from the server!")
+        # lets now parse the message
 
-    client_socket.close()
+        parts = message.split()
+
+        if parts[0] == "SET":
+            key = parts[1]
+            value = parts[2]
+            database[key] = value
+            client_socket.send(b"SET " + key.encode() + b" " + value.encode())
+
+        elif parts[0] == "GET":
+            key = parts[1]
+            value = database.get(key, None)
+            if value is not None:
+                client_socket.send(b"GET " + key.encode() + b" " + value.encode())
+            else:
+                client_socket.send(b"GET " + key.encode() + b" NOT FOUND")
+
+        elif parts[0] == "DEL":
+            key = parts[1]
+            if key in database:
+                del database[key]
+                client_socket.send(b"DEL " + key.encode() + b" DELETED")
+            else:
+                client_socket.send(b"DEL " + key.encode() + b" NOT FOUND")
+
+        else:
+            client_socket.send(b"ERROR: Unknown command")
+
+        print(f"Current database state: {database}")
+
+
+        print(f"Message from client: {message}")
+
+        client_socket.send(b"Hello from the server!")
+
+        client_socket.close()
+
+except KeyboardInterrupt:
+    print("Server is shutting down...")
 
 
 server.close()
