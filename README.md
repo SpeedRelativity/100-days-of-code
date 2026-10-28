@@ -1,11 +1,1 @@
-# 100 days of code
-
-My attempt at the 100 days of code challenge. I will be coding for at least an hour every day for 100 days and documenting my progress here. Strengthening fundamentals and learning new things is the goal. I will be using Python as my primary language, but I will also explore other languages and technologies as needed.
-
-## Day 1: Redis Clone
-
-### Underlying principle:
-
-We are creating a simple Redis clone to learn about networking, databases, and how key-value stores work. This project will help me reinforce the basics of data storage, retrieval, and manipulation.
-
-I've written `server.py` and `client.py` to demonstrate TCP connections, data transfer, and some Python syntax.
+ÿþ
